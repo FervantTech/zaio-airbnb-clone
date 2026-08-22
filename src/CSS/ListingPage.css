@@ -1,0 +1,21 @@
+.listing-page {
+    max-width: 1000px;
+    min-height: 650px;
+    margin: 0 auto;
+    padding: 50px 60px;
+}
+
+.listing-page-heading {
+    margin-bottom: 30px;
+}
+
+.listing-page-heading p {
+    margin-top: 8px;
+    color: #717171;
+}
+
+@media (max-width: 650px) {
+    .listing-page {
+        padding: 30px 20px;
+    }
+}
