@@ -1,0 +1,88 @@
+.cost-calculator {
+    position: sticky;
+    top: 30px;
+    align-self: start;
+    padding: 25px;
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.calculator-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.booking-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow: hidden;
+    border: 1px solid #717171;
+    border-radius: 8px;
+}
+
+.booking-fields label {
+    padding: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.booking-fields label:first-child {
+    border-right: 1px solid #717171;
+}
+
+.booking-fields input,
+.booking-fields select {
+    width: 100%;
+    margin-top: 6px;
+    border: none;
+    background-color: white;
+}
+
+.guest-field {
+    grid-column: 1 / 3;
+    border-top: 1px solid #717171;
+}
+
+.reserve-button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ff385c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.charge-message {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.cost-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0 20px;
+}
+
+.cost-breakdown div,
+.calculator-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.discount {
+    color: #008a05;
+}
+
+.calculator-total {
+    padding-top: 20px;
+    border-top: 1px solid #dddddd;
+}

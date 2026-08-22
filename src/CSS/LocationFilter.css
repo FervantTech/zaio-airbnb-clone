@@ -1,0 +1,40 @@
+.location-filter {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 650px;
+    margin: 35px auto;
+    padding: 12px 12px 12px 25px;
+    border: 1px solid #dddddd;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.filter-field {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.filter-field label {
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.filter-field select {
+    border: none;
+    background-color: transparent;
+    color: #717171;
+    outline: none;
+}
+
+.location-filter button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 30px;
+    background-color: #ff385c;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}

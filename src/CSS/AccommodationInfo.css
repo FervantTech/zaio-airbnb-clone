@@ -1,0 +1,45 @@
+.accommodation-info {
+    min-width: 0;
+}
+
+.host-summary,
+.information-section {
+    padding: 30px 0;
+    border-bottom: 1px solid #dddddd;
+}
+
+.host-summary h2,
+.information-section h2 {
+    margin-bottom: 12px;
+}
+
+.information-section p {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.bedroom-card {
+    width: 220px;
+    padding: 25px;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+}
+
+.amenities-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    padding-left: 20px;
+}
+
+.things-to-know {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+@media (max-width: 700px) {
+    .things-to-know {
+        grid-template-columns: 1fr;
+    }
+}
