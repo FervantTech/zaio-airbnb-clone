@@ -27,7 +27,9 @@ function CostCalculator({ accommodation }) {
     const accommodationCost = accommodation.price * nights;
 
     const discount =
-        nights >= 7 ? accommodation.weeklyDiscount : 0;
+        nights >= 7
+            ? accommodationCost * (accommodation.weeklyDiscount / 100)
+            : 0;
 
     const total =
         accommodationCost -
@@ -101,7 +103,9 @@ function CostCalculator({ accommodation }) {
 
                 {discount > 0 && (
                     <div className="discount">
-                        <span>Weekly discount</span>
+                        <span>
+                            Weekly discount ({accommodation.weeklyDiscount}%)
+                        </span>
                         <span>-{formatPrice(discount)}</span>
                     </div>
                 )}
