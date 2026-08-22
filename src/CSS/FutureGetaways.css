@@ -1,0 +1,52 @@
+.future-getaways {
+    padding: 60px;
+}
+
+.future-getaways h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.getaway-tabs {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    border-bottom: 1px solid #dddddd;
+}
+
+.getaway-tabs button {
+    padding: 15px 0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    color: #717171;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.getaway-tabs .active-tab {
+    border-bottom-color: #222222;
+    color: #222222;
+}
+
+.getaway-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    padding-top: 30px;
+}
+
+.getaway-item h3 {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.getaway-item p {
+    color: #717171;
+}
+
+@media (max-width: 700px) {
+    .getaway-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

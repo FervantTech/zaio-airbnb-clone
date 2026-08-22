@@ -5,6 +5,7 @@ import LocationDetails from "./pages/LocationDetails";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import "./App.css";
 
 function App() {
@@ -21,6 +22,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
+
+            <Footer />
+
         </BrowserRouter>
     );
 }

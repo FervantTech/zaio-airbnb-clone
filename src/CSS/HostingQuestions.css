@@ -1,0 +1,47 @@
+.hosting-questions {
+    min-height: 550px;
+    margin: 40px 60px;
+    padding: 50px;
+    border-radius: 12px;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: stretch;
+}
+
+.hosting-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: 360px;
+}
+
+.hosting-content h2 {
+    color: white;
+    font-size: 58px;
+    font-weight: 500;
+    line-height: 1.05;
+}
+
+.hosting-content button {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #222222;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .hosting-questions {
+        min-height: 450px;
+        margin: 30px 20px;
+        padding: 30px;
+    }
+
+    .hosting-content h2 {
+        font-size: 40px;
+    }
+}

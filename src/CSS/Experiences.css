@@ -1,0 +1,52 @@
+.experiences {
+    padding: 40px 60px;
+}
+
+.experiences h2 {
+    margin-bottom: 25px;
+    font-size: 32px;
+}
+
+.experiences-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.experience-card {
+    min-height: 600px;
+    padding: 50px;
+    border-radius: 12px;
+    background-position: center;
+    background-size: cover;
+    color: white;
+}
+
+.experience-content {
+    max-width: 320px;
+}
+
+.experience-content h3 {
+    margin-bottom: 25px;
+    font-size: 42px;
+}
+
+.experience-content button {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #222222;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .experiences-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-card {
+        min-height: 450px;
+    }
+}

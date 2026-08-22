@@ -1,0 +1,50 @@
+.inspiration {
+    padding: 40px 60px;
+}
+
+.inspiration h2 {
+    margin-bottom: 25px;
+    font-size: 32px;
+}
+
+.inspiration-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.inspiration-card {
+    overflow: hidden;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+}
+
+.inspiration-card img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    display: block;
+}
+
+.inspiration-card-content {
+    min-height: 130px;
+    padding: 20px;
+}
+
+.inspiration-card-content h3 {
+    margin-bottom: 8px;
+    font-size: 24px;
+}
+
+@media (max-width: 800px) {
+    .inspiration-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .inspiration-grid {
+        grid-template-columns: 1fr;
+    }
+}

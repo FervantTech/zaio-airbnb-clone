@@ -1,0 +1,39 @@
+.shop-airbnb {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    gap: 40px;
+    padding: 60px;
+}
+
+.shop-content h2 {
+    margin-bottom: 25px;
+    font-size: 48px;
+}
+
+.shop-content button {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222222;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.shop-image img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 800px) {
+    .shop-airbnb {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-content h2 {
+        font-size: 36px;
+    }
+}
