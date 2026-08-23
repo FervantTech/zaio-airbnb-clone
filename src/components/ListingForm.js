@@ -113,6 +113,11 @@ function ListingForm({
 
     return (
         <form className="listing-form" onSubmit={handleSubmit}>
+            <div className="listing-form-section-heading">
+                <h2>Property details</h2>
+                <p>Tell guests what makes this accommodation special.</p>
+            </div>
+
             <div className="form-group full-width">
                 <label htmlFor="title">Listing title</label>
                 <input
@@ -120,6 +125,7 @@ function ListingForm({
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
+                    placeholder="Luxury apartment with city views"
                 />
                 {showError("title")}
             </div>
@@ -165,10 +171,18 @@ function ListingForm({
                 {showError("description")}
             </div>
 
+            <div className="listing-form-section-heading">
+                <h2>Rooms and pricing</h2>
+                <p>Set the capacity and nightly price for this listing.</p>
+            </div>
+
             {["guests", "bedrooms", "bathrooms", "price"].map((field) => (
                 <div className="form-group" key={field}>
                     <label htmlFor={field}>
-                        {field.charAt(0).toUpperCase() + field.slice(1)}
+                        {field === "price"
+                            ? "Price per night (R)"
+                            : field.charAt(0).toUpperCase() +
+                              field.slice(1)}
                     </label>
                     <input
                         id={field}
@@ -183,9 +197,7 @@ function ListingForm({
             ))}
 
             <div className="form-group full-width">
-                <label htmlFor="amenities">
-                    Amenities separated by commas
-                </label>
+                <label htmlFor="amenities">Amenities</label>
                 <input
                     id="amenities"
                     name="amenities"
@@ -193,6 +205,14 @@ function ListingForm({
                     onChange={handleChange}
                     placeholder="Wifi, Kitchen, Free parking"
                 />
+                <p className="form-help-text">
+                    Separate each amenity with a comma.
+                </p>
+            </div>
+
+            <div className="listing-form-section-heading">
+                <h2>Fees and discount</h2>
+                <p>Add any extra charges and the weekly discount.</p>
             </div>
 
             {[
@@ -216,7 +236,12 @@ function ListingForm({
                 </div>
             ))}
 
-            <div className="form-group full-width">
+            <div className="listing-form-section-heading">
+                <h2>Property images</h2>
+                <p>Select clear photos that show the accommodation.</p>
+            </div>
+
+            <div className="form-group full-width image-upload-group">
                 <label htmlFor="images">Property images</label>
                 <input
                     id="images"
@@ -227,7 +252,9 @@ function ListingForm({
                 />
 
                 {images.length > 0 && (
-                    <p>{images.length} images selected</p>
+                    <p className="selected-images-message">
+                        {images.length} images selected
+                    </p>
                 )}
             </div>
 

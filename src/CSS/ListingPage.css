@@ -19,3 +19,7 @@
         padding: 30px 20px;
     }
 }
+
+body:has(.listing-page) {
+    background-color: #f7f7f7;
+}

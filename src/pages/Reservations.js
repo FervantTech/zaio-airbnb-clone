@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API_URL from "../config/api";
+import AdminNavigation from "../components/AdminNavigation";
 import "../CSS/Reservations.css";
 
 function Reservations() {
@@ -97,16 +98,40 @@ function Reservations() {
     }
 
     return (
-        <main className="reservations-page">
-            <h1>
-                {isHost ? "Guest reservations" : "Your reservations"}
-            </h1>
+        <>
+            {isHost && <AdminNavigation />}
 
-            <p>
-                {isHost
-                    ? "View reservations made for your properties."
-                    : "View and manage your upcoming stays."}
-            </p>
+            <main
+                className={`reservations-page ${
+                    isHost ? "admin-reservations-page" : ""
+                }`}
+            >
+            <section className="reservations-heading">
+                <div>
+                    <h1>
+                        {isHost
+                            ? "Guest reservations"
+                            : "Your reservations"}
+                    </h1>
+
+                    <p>
+                        {isHost
+                            ? "View and manage bookings made for your properties."
+                            : "View and manage your upcoming stays."}
+                    </p>
+                </div>
+
+                {isHost && !loading && (
+                    <div className="reservation-count">
+                        <strong>{reservations.length}</strong>
+                        <span>
+                            {reservations.length === 1
+                                ? "Reservation"
+                                : "Reservations"}
+                        </span>
+                    </div>
+                )}
+            </section>
 
             {loading && <p>Loading reservations...</p>}
             {error && <p className="page-error">{error}</p>}
@@ -179,7 +204,7 @@ function Reservations() {
                                                 handleDelete(reservation._id)
                                             }
                                         >
-                                            Cancel
+                                            {isHost ? "Delete" : "Cancel"}
                                         </button>
                                     </td>
                                 </tr>
@@ -188,7 +213,8 @@ function Reservations() {
                     </table>
                 </div>
             )}
-        </main>
+            </main>
+        </>
     );
 }
 

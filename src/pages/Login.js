@@ -74,7 +74,9 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/admin");
+      const isAdmin = ["host", "admin"].includes(data.user.role);
+
+      navigate(isAdmin ? "/admin" : "/");
     } catch (error) {
       setErrors({
         form: "Could not connect to the server.",
@@ -86,10 +88,11 @@ function Login() {
 
   return (
     <main className="login-page">
-        
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1>Log in</h1>
-        <p>Welcome back to Airbnb Clone</p>
+        <div className="login-form-heading">
+          <h1>Log in to Airbnb Clone</h1>
+          <p>Enter your details to manage your account.</p>
+        </div>
 
         <label htmlFor="email">Email address</label>
         <input
@@ -99,6 +102,8 @@ function Login() {
           value={formData.email}
           onChange={handleChange}
           placeholder="name@example.com"
+          autoComplete="email"
+          aria-invalid={Boolean(errors.email)}
         />
 
         {errors.email && <p className="form-error">{errors.email}</p>}
@@ -111,15 +116,25 @@ function Login() {
           value={formData.password}
           onChange={handleChange}
           placeholder="Enter your password"
+          autoComplete="current-password"
+          aria-invalid={Boolean(errors.password)}
         />
 
         {errors.password && <p className="form-error">{errors.password}</p>}
-{errors.form && (
-    <p className="form-error">{errors.form}</p>
-)}
+
+        {errors.form && (
+          <p className="form-error login-form-message" role="alert">
+            {errors.form}
+          </p>
+        )}
+
         <button type="submit" disabled={loading}>
-    {loading ? "Logging in..." : "Continue"}
-</button>
+          {loading ? "Logging in..." : "Continue"}
+        </button>
+
+        <p className="login-security-message">
+          Your login details are securely checked by the server.
+        </p>
       </form>
     </main>
   );

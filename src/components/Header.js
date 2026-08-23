@@ -62,6 +62,12 @@ function handleLogout() {
 
                         {menuOpen && (
                             <div className="profile-dropdown">
+                                {["host", "admin"].includes(user.role) && (
+                                    <Link to="/admin">
+                                        Dashboard
+                                    </Link>
+                                )}
+
                                 <Link to="/reservations">
                                     View reservations
                                 </Link>

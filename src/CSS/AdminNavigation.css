@@ -1,0 +1,36 @@
+.admin-navigation {
+    display: flex;
+    gap: 12px;
+    padding: 14px 60px;
+    border-bottom: 1px solid #dddddd;
+    background-color: white;
+}
+
+.admin-navigation a {
+    padding: 9px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 20px;
+    color: #222222;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.admin-navigation a:hover,
+.admin-navigation .admin-nav-active {
+    border-color: #222222;
+    background-color: #222222;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .admin-navigation {
+        gap: 8px;
+        padding: 12px 20px;
+        overflow-x: auto;
+    }
+
+    .admin-navigation a {
+        white-space: nowrap;
+    }
+}

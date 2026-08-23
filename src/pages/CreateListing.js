@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
+import AdminNavigation from "../components/AdminNavigation";
 import "../CSS/ListingPage.css";
 
 function CreateListing() {
@@ -51,7 +52,10 @@ function CreateListing() {
     }
 
     return (
-        <main className="listing-page">
+        <>
+            <AdminNavigation />
+
+            <main className="listing-page">
             <div className="listing-page-heading">
                 <h1>Create a new listing</h1>
                 <p>Enter the property’s information below.</p>
@@ -65,7 +69,8 @@ function CreateListing() {
                 }
                 onSubmit={handleCreate}
             />
-        </main>
+            </main>
+        </>
     );
 }
 

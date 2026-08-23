@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
+import AdminNavigation from "../components/AdminNavigation";
 import "../CSS/ListingPage.css";
 
 function UpdateListing() {
@@ -87,19 +88,25 @@ function UpdateListing() {
 
     if (loading) {
         return (
-            <main className="listing-page">
-                <p>Loading listing...</p>
-            </main>
+            <>
+                <AdminNavigation />
+                <main className="listing-page">
+                    <p>Loading listing...</p>
+                </main>
+            </>
         );
     }
 
     if (!accommodation) {
         return (
-            <main className="listing-page">
-                <p className="page-error">
-                    {error || "Listing not found"}
-                </p>
-            </main>
+            <>
+                <AdminNavigation />
+                <main className="listing-page">
+                    <p className="page-error">
+                        {error || "Listing not found"}
+                    </p>
+                </main>
+            </>
         );
     }
 
@@ -120,7 +127,10 @@ function UpdateListing() {
     };
 
     return (
-        <main className="listing-page">
+        <>
+            <AdminNavigation />
+
+            <main className="listing-page">
             <div className="listing-page-heading">
                 <h1>Update listing</h1>
                 <p>Edit the property’s information below.</p>
@@ -135,7 +145,8 @@ function UpdateListing() {
                 }
                 onSubmit={handleUpdate}
             />
-        </main>
+            </main>
+        </>
     );
 }
 

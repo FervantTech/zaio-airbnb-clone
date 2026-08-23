@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API_URL from "../config/api";
 import getImageUrl from "../utils/imageUrl";
+import AdminNavigation from "../components/AdminNavigation";
 import "../CSS/AdminDashboard.css";
 
 function AdminDashboard() {
@@ -78,7 +79,10 @@ function AdminDashboard() {
     ).size;
 
     return (
-        <main className="admin-dashboard">
+        <>
+            <AdminNavigation />
+
+            <main className="admin-dashboard">
             <section className="admin-heading">
                 <div>
                     <h1>Admin Dashboard</h1>
@@ -115,67 +119,87 @@ function AdminDashboard() {
                     <section className="admin-listings">
                         <h2>Your listings</h2>
 
-                        <div className="admin-table-wrapper">
-                            <table className="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Image</th>
-                                        <th>Title</th>
-                                        <th>Location</th>
-                                        <th>Price</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
+                        {listings.length === 0 && (
+                            <p>You have not created any listings yet.</p>
+                        )}
 
-                                <tbody>
-                                    {listings.map((listing) => (
-                                        <tr key={listing._id}>
-                                            <td>
-                                                <img
-                                                    src={getImageUrl(
-                                                        listing.images[0]
-                                                    )}
-                                                    alt={listing.title}
-                                                />
-                                            </td>
+                        <div className="admin-listing-grid">
+                            {listings.map((listing) => (
+                                <article
+                                    className="admin-listing-card"
+                                    key={listing._id}
+                                >
+                                    <img
+                                        className="admin-listing-image"
+                                        src={getImageUrl(listing.images[0])}
+                                        alt={listing.title}
+                                    />
 
-                                            <td>{listing.title}</td>
-                                            <td>{listing.location}</td>
-                                            <td>
-                                                R
-                                                {listing.price.toLocaleString()}{" "}
+                                    <div className="admin-listing-details">
+                                        <p className="admin-listing-type">
+                                            {listing.type}
+                                        </p>
+
+                                        <h3>{listing.title}</h3>
+
+                                        <p className="admin-listing-location">
+                                            {listing.location}
+                                        </p>
+
+                                        <p className="admin-listing-features">
+                                            {listing.guests} guests ·{" "}
+                                            {listing.bedrooms} bedrooms ·{" "}
+                                            {listing.bathrooms} bathrooms
+                                        </p>
+
+                                        <p className="admin-listing-amenities">
+                                            {listing.amenities
+                                                .slice(0, 3)
+                                                .join(" · ")}
+                                        </p>
+
+                                        <div className="admin-listing-bottom">
+                                            <p>
+                                                <strong>
+                                                    ★ {listing.rating}
+                                                </strong>{" "}
+                                                ({listing.reviews} reviews)
+                                            </p>
+
+                                            <p className="admin-listing-price">
+                                                <strong>
+                                                    R
+                                                    {listing.price.toLocaleString()}
+                                                </strong>{" "}
                                                 / night
-                                            </td>
+                                            </p>
+                                        </div>
 
-                                            <td>
-                                                <div className="listing-actions">
-                                                    <Link
-                                                        to={`/admin/update/${listing._id}`}
-                                                    >
-                                                        Update
-                                                    </Link>
+                                        <div className="listing-actions">
+                                            <Link
+                                                to={`/admin/update/${listing._id}`}
+                                            >
+                                                Update
+                                            </Link>
 
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                listing._id
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDelete(listing._id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
                     </section>
                 </>
             )}
-        </main>
+            </main>
+        </>
     );
 }
 
