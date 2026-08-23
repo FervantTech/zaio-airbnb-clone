@@ -11,7 +11,9 @@ function Inspiration() {
         {locations.map((location) => (
           <Link
             className="inspiration-card"
-            to={`/locations/${location.id}`}
+                        to={`/locations?city=${encodeURIComponent(
+                            location.name
+                        )}`}
             key={location.id}
             style={{ backgroundColor: location.color }}
           >

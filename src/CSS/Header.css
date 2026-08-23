@@ -91,6 +91,26 @@ button.profile-button {
 .profile-dropdown button:hover {
     background-color: #f7f7f7;
 }
+
+@media (max-width: 700px) {
+    .header {
+        padding: 16px 20px;
+    }
+
+    .header-logo img {
+        width: 90px;
+    }
+
+    .header-navigation,
+    .header-profile > a:not(.profile-button),
+    .user-menu > span {
+        display: none;
+    }
+
+    .header-profile {
+        gap: 10px;
+    }
+}
 .profile-dropdown a,
 .profile-dropdown button {
     font-family: inherit;
