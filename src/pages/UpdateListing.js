@@ -1,20 +1,104 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
-import accommodations from "../data/accommodations";
 import "../CSS/ListingPage.css";
 
 function UpdateListing() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const accommodation = accommodations.find(
-        (listing) => listing.id === Number(id)
-    );
+    const [accommodation, setAccommodation] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        async function loadAccommodation() {
+            try {
+                const response = await fetch(
+                    `${API_URL}/accommodations/${id}`
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Could not load listing"
+                    );
+                }
+
+                setAccommodation(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadAccommodation();
+    }, [id]);
+
+    async function handleUpdate(updatedListing) {
+        try {
+            setSaving(true);
+            setError("");
+
+            const token = localStorage.getItem("token");
+
+            const listingData = {
+                ...updatedListing,
+                images:
+                    updatedListing.images.length > 0
+                        ? updatedListing.images.map(
+                              (image) => image.name
+                          )
+                        : accommodation.images,
+            };
+
+            const response = await fetch(
+                `${API_URL}/accommodations/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(listingData),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Could not update listing"
+                );
+            }
+
+            alert("Listing updated successfully.");
+            navigate("/admin");
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    if (loading) {
+        return (
+            <main className="listing-page">
+                <p>Loading listing...</p>
+            </main>
+        );
+    }
 
     if (!accommodation) {
         return (
             <main className="listing-page">
-                <h1>Listing not found</h1>
+                <p className="page-error">
+                    {error || "Listing not found"}
+                </p>
             </main>
         );
     }
@@ -35,13 +119,6 @@ function UpdateListing() {
         occupancyTaxes: accommodation.occupancyTaxes,
     };
 
-    function handleUpdate(updatedListing) {
-        console.log("Updated listing:", updatedListing);
-
-        alert("Listing updated successfully.");
-        navigate("/admin");
-    }
-
     return (
         <main className="listing-page">
             <div className="listing-page-heading">
@@ -49,9 +126,13 @@ function UpdateListing() {
                 <p>Edit the property’s information below.</p>
             </div>
 
+            {error && <p className="page-error">{error}</p>}
+
             <ListingForm
                 initialListing={initialListing}
-                buttonText="Save changes"
+                buttonText={
+                    saving ? "Saving changes..." : "Save changes"
+                }
                 onSubmit={handleUpdate}
             />
         </main>

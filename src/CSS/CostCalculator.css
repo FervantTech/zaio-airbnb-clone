@@ -86,3 +86,19 @@
     padding-top: 20px;
     border-top: 1px solid #dddddd;
 }
+.reserve-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.reservation-error {
+    margin-top: 12px;
+    color: #c5221f;
+    text-align: center;
+}
+
+.reservation-success {
+    margin-top: 12px;
+    color: #137333;
+    text-align: center;
+}

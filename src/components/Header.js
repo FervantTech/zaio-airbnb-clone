@@ -22,12 +22,14 @@ function Header() {
         setMenuOpen(false);
     }, [location.pathname]);
 
-    function handleLogout() {
-        localStorage.removeItem("user");
-        setUser(null);
-        setMenuOpen(false);
-        navigate("/");
-    }
+function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    setUser(null);
+    setMenuOpen(false);
+    navigate("/");
+}
 
     return (
         <header className="header">

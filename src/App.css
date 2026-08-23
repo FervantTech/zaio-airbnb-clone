@@ -17,3 +17,9 @@ body {
     margin: 8px 0 30px;
     font-size: 32px;
 }
+.page-error {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fce8e6;
+    color: #c5221f;
+}

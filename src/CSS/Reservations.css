@@ -42,3 +42,16 @@
     color: #137333;
     font-weight: bold;
 }
+.cancel-reservation {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #fce8e6;
+    color: #c5221f;
+    font: inherit;
+    cursor: pointer;
+}
+
+.reservation-status {
+    text-transform: capitalize;
+}

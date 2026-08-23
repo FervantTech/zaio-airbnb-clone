@@ -48,9 +48,10 @@ async function getAccommodationById(req, res) {
 async function createAccommodation(req, res) {
     try {
         const accommodation = await Accommodation.create({
-            ...req.body,
-            hostId: req.user._id,
-        });
+    ...req.body,
+    host: req.body.host || req.user.username,
+    hostId: req.user._id,
+});
 
         res.status(201).json(accommodation);
     } catch (error) {

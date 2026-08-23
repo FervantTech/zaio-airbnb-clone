@@ -1,3 +1,8 @@
+const { webcrypto } = require("node:crypto");
+
+if (!globalThis.crypto) {
+    globalThis.crypto = webcrypto;
+}
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");

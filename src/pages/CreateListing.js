@@ -1,15 +1,53 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
 import "../CSS/ListingPage.css";
 
 function CreateListing() {
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    function handleCreate(listing) {
-        console.log("New listing:", listing);
+    async function handleCreate(listing) {
+        try {
+            setLoading(true);
+            setError("");
 
-        alert("Listing created successfully.");
-        navigate("/admin");
+            const token = localStorage.getItem("token");
+
+            const listingData = {
+                ...listing,
+                images: listing.images.map((image) => image.name),
+            };
+
+            const response = await fetch(
+                `${API_URL}/accommodations`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(listingData),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Could not create listing"
+                );
+            }
+
+            alert("Listing created successfully.");
+            navigate("/admin");
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -19,8 +57,12 @@ function CreateListing() {
                 <p>Enter the property’s information below.</p>
             </div>
 
+            {error && <p className="page-error">{error}</p>}
+
             <ListingForm
-                buttonText="Create listing"
+                buttonText={
+                    loading ? "Creating listing..." : "Create listing"
+                }
                 onSubmit={handleCreate}
             />
         </main>
