@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, allowedRoles }) {
     const token = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
 
@@ -9,9 +9,7 @@ function ProtectedRoute({ children }) {
     }
 
     const user = JSON.parse(savedUser);
-    const isAdmin = ["host", "admin"].includes(user.role);
-
-    if (!isAdmin) {
+    if (allowedRoles && !allowedRoles.includes(user.role)) {
         return <Navigate to="/" replace />;
     }
 

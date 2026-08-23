@@ -7,25 +7,44 @@ import "../CSS/AdminDashboard.css";
 
 function AdminDashboard() {
     const [listings, setListings] = useState([]);
+    const [reservationCount, setReservationCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     useEffect(() => {
         async function loadListings() {
             try {
-                const response = await fetch(
-                    `${API_URL}/accommodations`
-                );
+                const token = localStorage.getItem("token");
 
-                const data = await response.json();
+                const [listingsResponse, reservationsResponse] =
+                    await Promise.all([
+                        fetch(`${API_URL}/accommodations`),
+                        fetch(`${API_URL}/reservations/host`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }),
+                    ]);
 
-                if (!response.ok) {
+                const listingsData = await listingsResponse.json();
+                const reservationsData =
+                    await reservationsResponse.json();
+
+                if (!listingsResponse.ok) {
                     throw new Error(
-                        data.message || "Could not load listings"
+                        listingsData.message || "Could not load listings"
                     );
                 }
 
-                setListings(data);
+                if (!reservationsResponse.ok) {
+                    throw new Error(
+                        reservationsData.message ||
+                            "Could not load reservations"
+                    );
+                }
+
+                setListings(listingsData);
+                setReservationCount(reservationsData.length);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -106,7 +125,7 @@ function AdminDashboard() {
                         </article>
 
                         <article>
-                            <h2>1</h2>
+                            <h2>{reservationCount}</h2>
                             <p>Reservations</p>
                         </article>
 

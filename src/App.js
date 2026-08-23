@@ -10,6 +10,7 @@ import Reservations from "./pages/Reservations";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
+import NotFound from "./pages/NotFound";
 import "./App.css";
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["host", "admin"]}>
               <AdminDashboard />
             </ProtectedRoute>
           }
@@ -32,7 +33,7 @@ function App() {
         <Route
           path="/admin/create"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["host", "admin"]}>
               <CreateListing />
             </ProtectedRoute>
           }
@@ -40,12 +41,20 @@ function App() {
         <Route
           path="/admin/update/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["host", "admin"]}>
               <UpdateListing />
             </ProtectedRoute>
           }
         />
-        <Route path="/reservations" element={<Reservations />} />
+        <Route
+          path="/reservations"
+          element={
+            <ProtectedRoute>
+              <Reservations />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />

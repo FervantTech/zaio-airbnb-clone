@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import API_URL from "../config/api";
-import LocationFilter from "../components/LocationFilter";
 import LocationCard from "../components/LocationCard";
 
 function Locations() {
@@ -45,8 +44,6 @@ function Locations() {
 
     return (
         <main>
-            <LocationFilter />
-
             <section className="locations-page">
                 {loading && <p>Loading accommodations...</p>}
 
