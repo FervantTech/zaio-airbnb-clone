@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
 import AdminNavigation from "../components/AdminNavigation";
+import createListingFormData from "../utils/listingFormData";
 import "../CSS/ListingPage.css";
 
 function UpdateListing() {
@@ -47,25 +48,16 @@ function UpdateListing() {
 
             const token = localStorage.getItem("token");
 
-            const listingData = {
-                ...updatedListing,
-                images:
-                    updatedListing.images.length > 0
-                        ? updatedListing.images.map(
-                              (image) => image.name
-                          )
-                        : accommodation.images,
-            };
+            const listingData = createListingFormData(updatedListing);
 
             const response = await fetch(
                 `${API_URL}/accommodations/${id}`,
                 {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
-                    body: JSON.stringify(listingData),
+                    body: listingData,
                 }
             );
 

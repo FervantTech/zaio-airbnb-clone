@@ -21,6 +21,7 @@ function ListingForm({
     initialListing = emptyListing,
     buttonText,
     onSubmit,
+    requireImages = false,
 }) {
     const [formData, setFormData] = useState(initialListing);
     const [images, setImages] = useState([]);
@@ -72,6 +73,16 @@ function ListingForm({
 
         if (Number(formData.price) <= 0) {
             newErrors.price = "Enter a valid price.";
+        }
+
+        if (requireImages && images.length === 0) {
+            newErrors.images = "Select at least one property image.";
+        } else if (images.length > 5) {
+            newErrors.images = "You can upload a maximum of 5 images.";
+        } else if (
+            images.some((image) => image.size > 5 * 1024 * 1024)
+        ) {
+            newErrors.images = "Each image must be smaller than 5MB.";
         }
 
         return newErrors;
@@ -256,6 +267,14 @@ function ListingForm({
                         {images.length} images selected
                     </p>
                 )}
+
+                {!requireImages && images.length === 0 && (
+                    <p className="form-help-text">
+                        Leave this empty to keep the current images.
+                    </p>
+                )}
+
+                {showError("images")}
             </div>
 
             <button className="listing-submit-button" type="submit">

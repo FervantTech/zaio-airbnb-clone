@@ -12,6 +12,7 @@ const {
     protect,
     allowRoles,
 } = require("../middleware/auth");
+const uploadImages = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -22,12 +23,14 @@ router.post(
     "/",
     protect,
     allowRoles("host", "admin"),
+    uploadImages,
     createAccommodation
 );
 router.put(
     "/:id",
     protect,
     allowRoles("host", "admin"),
+    uploadImages,
     updateAccommodation
 );
 router.delete(

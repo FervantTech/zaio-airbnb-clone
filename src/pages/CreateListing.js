@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API_URL from "../config/api";
 import ListingForm from "../components/ListingForm";
 import AdminNavigation from "../components/AdminNavigation";
+import createListingFormData from "../utils/listingFormData";
 import "../CSS/ListingPage.css";
 
 function CreateListing() {
@@ -17,20 +18,16 @@ function CreateListing() {
 
             const token = localStorage.getItem("token");
 
-            const listingData = {
-                ...listing,
-                images: listing.images.map((image) => image.name),
-            };
+            const listingData = createListingFormData(listing);
 
             const response = await fetch(
                 `${API_URL}/accommodations`,
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
-                    body: JSON.stringify(listingData),
+                    body: listingData,
                 }
             );
 
@@ -64,6 +61,7 @@ function CreateListing() {
             {error && <p className="page-error">{error}</p>}
 
             <ListingForm
+                requireImages
                 buttonText={
                     loading ? "Creating listing..." : "Create listing"
                 }

@@ -5,6 +5,7 @@ if (!globalThis.crypto) {
 }
 const mongoose = require("mongoose");
 const express = require("express");
+const path = require("node:path");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const accommodationRoutes = require(
@@ -20,6 +21,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
+);
 app.use("/api/accommodations", accommodationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/reservations", reservationRoutes);

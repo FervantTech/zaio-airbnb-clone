@@ -1,6 +1,31 @@
 const mongoose = require("mongoose");
 const Accommodation = require("../models/Accommodation");
 
+function prepareAccommodationData(body) {
+    const accommodationData = {
+        ...body,
+    };
+
+    if (typeof accommodationData.amenities === "string") {
+        try {
+            accommodationData.amenities = JSON.parse(
+                accommodationData.amenities
+            );
+        } catch (error) {
+            accommodationData.amenities = accommodationData.amenities
+                .split(",")
+                .map((amenity) => amenity.trim())
+                .filter(Boolean);
+        }
+    }
+
+    return accommodationData;
+}
+
+function getUploadedImagePaths(files = []) {
+    return files.map((file) => `/uploads/${file.filename}`);
+}
+
 async function getAccommodations(req, res) {
     try {
         const filter = {};
@@ -47,11 +72,21 @@ async function getAccommodationById(req, res) {
 
 async function createAccommodation(req, res) {
     try {
+        const accommodationData = prepareAccommodationData(req.body);
+        const uploadedImages = getUploadedImagePaths(req.files);
+
+        if (uploadedImages.length === 0) {
+            return res.status(400).json({
+                message: "At least one property image is required",
+            });
+        }
+
         const accommodation = await Accommodation.create({
-    ...req.body,
-    host: req.body.host || req.user.username,
-    hostId: req.user._id,
-});
+            ...accommodationData,
+            images: uploadedImages,
+            host: accommodationData.host || req.user.username,
+            hostId: req.user._id,
+        });
 
         res.status(201).json(accommodation);
     } catch (error) {
@@ -70,9 +105,12 @@ async function updateAccommodation(req, res) {
             });
         }
 
-        const updates = {
-            ...req.body,
-        };
+        const updates = prepareAccommodationData(req.body);
+        const uploadedImages = getUploadedImagePaths(req.files);
+
+        if (uploadedImages.length > 0) {
+            updates.images = uploadedImages;
+        }
 
         delete updates.hostId;
 
