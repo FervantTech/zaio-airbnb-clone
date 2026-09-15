@@ -108,9 +108,12 @@ async function createReservation(req, res) {
 
 async function getHostReservations(req, res) {
     try {
-        const reservations = await Reservation.find({
-            host: req.user._id,
-        })
+        const filter =
+            req.user.role === "admin"
+                ? {}
+                : { host: req.user._id };
+
+        const reservations = await Reservation.find(filter)
             .populate("accommodation", "title location images")
             .populate("user", "username email")
             .sort({ createdAt: -1 });
