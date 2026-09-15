@@ -108,12 +108,17 @@ async function createReservation(req, res) {
 
 async function getHostReservations(req, res) {
     try {
-        const filter =
-            req.user.role === "admin"
-                ? {}
-                : { host: req.user._id };
+        const accommodations = await Accommodation.find({
+            hostId: req.user._id,
+        }).select("_id");
 
-        const reservations = await Reservation.find(filter)
+        const accommodationIds = accommodations.map(
+            (accommodation) => accommodation._id
+        );
+
+        const reservations = await Reservation.find({
+            accommodation: { $in: accommodationIds },
+        })
             .populate("accommodation", "title location images")
             .populate("user", "username email")
             .sort({ createdAt: -1 });
