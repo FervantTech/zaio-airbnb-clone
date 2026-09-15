@@ -3,7 +3,6 @@ import BookingCalendar from "./BookingCalendar";
 import ReviewSection from "./ReviewSection";
 import HostDetails from "./HostDetails";
 import ThingsToKnow from "./ThingsToKnow";
-import getImageUrl from "../utils/imageUrl";
 import {
     FaBroom,
     FaDoorOpen,
@@ -55,12 +54,6 @@ function AccommodationInfo({
             <section className="information-section">
                 <h2>Where you’ll sleep</h2>
                 <div className="bedroom-card">
-                    <img
-                        src={getImageUrl(
-                            accommodation.images[1] || accommodation.images[0]
-                        )}
-                        alt={`Bedroom at ${accommodation.title}`}
-                    />
                     <h3>Bedroom</h3>
                     <p>1 queen bed</p>
                 </div>
