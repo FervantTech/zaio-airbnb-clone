@@ -14,30 +14,30 @@ import {
 } from "react-icons/fa";
 
 const houseRules = [
-    [FaClock, "Check-in: After 4:00 PM"],
-    [FaClock, "Check-out: 10:00 AM"],
-    [FaDoorOpen, "Self check-in with lock-box"],
-    [FaBaby, "Not suitable for infants (under 2 years)"],
-    [FaSmokingBan, "No smoking"],
-    [FaPaw, "No pets"],
-    [FaGlassCheers, "No parties or events"],
+    { Icon: FaClock, text: "Check-in: After 4:00 PM" },
+    { Icon: FaClock, text: "Check-out: 10:00 AM" },
+    { Icon: FaDoorOpen, text: "Self check-in with lock-box" },
+    { Icon: FaBaby, text: "Not suitable for infants (under 2 years)" },
+    { Icon: FaSmokingBan, text: "No smoking" },
+    { Icon: FaPaw, text: "No pets" },
+    { Icon: FaGlassCheers, text: "No parties or events" },
 ];
 
 const safetyItems = [
-    [FaBroom, "Committed to Airbnb’s enhanced cleaning process."],
-    [FaUsers, "Airbnb’s social-distancing and other safety guidelines apply"],
-    [FaVolumeMute, "Carbon monoxide alarm"],
-    [FaShieldAlt, "Smoke alarm"],
-    [FaExclamationTriangle, "Security deposit may apply if you damage the home"],
+    { Icon: FaBroom, text: "Committed to Airbnb’s enhanced cleaning process." },
+    { Icon: FaUsers, text: "Airbnb’s social-distancing and other safety guidelines apply" },
+    { Icon: FaVolumeMute, text: "Carbon monoxide alarm" },
+    { Icon: FaShieldAlt, text: "Smoke alarm" },
+    { Icon: FaExclamationTriangle, text: "Security deposit may apply if you damage the home" },
 ];
 
 function InformationList({ items }) {
     return (
         <ul className="things-list">
-            {items.map(([Icon, text]) => (
-                <li key={text}>
-                    <Icon aria-hidden="true" />
-                    <span>{text}</span>
+            {items.map((item) => (
+                <li key={item.text}>
+                    <item.Icon aria-hidden="true" />
+                    <span>{item.text}</span>
                 </li>
             ))}
         </ul>

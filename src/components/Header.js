@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Link,
     useLocation,
@@ -18,7 +18,6 @@ function Header() {
     const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
     const [guestMenuOpen, setGuestMenuOpen] = useState(false);
-    const guestPickerRef = useRef(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -48,20 +47,6 @@ function Header() {
         );
         setGuestMenuOpen(false);
     }, [location.pathname, location.search]);
-
-    useEffect(() => {
-        function closeGuestMenu(event) {
-            if (
-                guestPickerRef.current &&
-                !guestPickerRef.current.contains(event.target)
-            ) {
-                setGuestMenuOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", closeGuestMenu);
-        return () => document.removeEventListener("mousedown", closeGuestMenu);
-    }, []);
 
     const showSearch =
         !location.pathname.startsWith("/admin") &&
@@ -225,7 +210,7 @@ function Header() {
                         />
                     </label>
 
-                    <div className="guest-picker" ref={guestPickerRef}>
+                    <div className="guest-picker">
                         <button
                             className="guest-picker-toggle"
                             type="button"

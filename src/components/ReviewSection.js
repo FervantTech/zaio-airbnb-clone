@@ -1,10 +1,10 @@
 const REVIEW_CATEGORIES = [
-    ["Cleanliness", 5.0],
-    ["Accuracy", 4.8],
-    ["Communication", 4.9],
-    ["Location", 4.7],
-    ["Check-in", 4.8],
-    ["Value", 4.7],
+    { name: "Cleanliness", score: 5.0 },
+    { name: "Accuracy", score: 4.8 },
+    { name: "Communication", score: 4.9 },
+    { name: "Location", score: 4.7 },
+    { name: "Check-in", score: 4.8 },
+    { name: "Value", score: 4.7 },
 ];
 
 const SAMPLE_REVIEWS = [
@@ -55,13 +55,17 @@ function ReviewSection({ rating, reviewCount }) {
             <h2>★ {rating} · {reviewCount} reviews</h2>
 
             <div className="rating-breakdown">
-                {REVIEW_CATEGORIES.map(([category, score]) => (
-                    <div className="rating-row" key={category}>
-                        <span>{category}</span>
+                {REVIEW_CATEGORIES.map((category) => (
+                    <div className="rating-row" key={category.name}>
+                        <span>{category.name}</span>
                         <span className="rating-track" aria-hidden="true">
-                            <span style={{ width: `${(score / 5) * 100}%` }} />
+                            <span
+                                style={{
+                                    width: `${(category.score / 5) * 100}%`,
+                                }}
+                            />
                         </span>
-                        <strong>{score.toFixed(1)}</strong>
+                        <strong>{category.score.toFixed(1)}</strong>
                     </div>
                 ))}
             </div>
