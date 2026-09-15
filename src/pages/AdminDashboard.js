@@ -7,28 +7,17 @@ import "../CSS/AdminDashboard.css";
 
 function AdminDashboard() {
     const [listings, setListings] = useState([]);
-    const [reservationCount, setReservationCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     useEffect(() => {
         async function loadListings() {
             try {
-                const token = localStorage.getItem("token");
-
-                const [listingsResponse, reservationsResponse] =
-                    await Promise.all([
-                        fetch(`${API_URL}/accommodations`),
-                        fetch(`${API_URL}/reservations/host`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }),
-                    ]);
+                const listingsResponse = await fetch(
+                    `${API_URL}/accommodations`
+                );
 
                 const listingsData = await listingsResponse.json();
-                const reservationsData =
-                    await reservationsResponse.json();
 
                 if (!listingsResponse.ok) {
                     throw new Error(
@@ -36,15 +25,7 @@ function AdminDashboard() {
                     );
                 }
 
-                if (!reservationsResponse.ok) {
-                    throw new Error(
-                        reservationsData.message ||
-                            "Could not load reservations"
-                    );
-                }
-
                 setListings(listingsData);
-                setReservationCount(reservationsData.length);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -93,51 +74,18 @@ function AdminDashboard() {
         }
     }
 
-    const locationCount = new Set(
-        listings.map((listing) => listing.location)
-    ).size;
-
     return (
         <>
             <AdminNavigation />
 
             <main className="admin-dashboard">
-            <section className="admin-heading">
-                <div>
-                    <h1>Admin Dashboard</h1>
-                    <p>Manage your Airbnb property listings.</p>
-                </div>
-
-                <Link className="create-listing-button" to="/admin/create">
-                    Create listing
-                </Link>
-            </section>
-
             {error && <p className="page-error">{error}</p>}
             {loading && <p>Loading listings...</p>}
 
             {!loading && (
                 <>
-                    <section className="dashboard-summary">
-                        <article>
-                            <h2>{listings.length}</h2>
-                            <p>Total listings</p>
-                        </article>
-
-                        <article>
-                            <h2>{reservationCount}</h2>
-                            <p>Reservations</p>
-                        </article>
-
-                        <article>
-                            <h2>{locationCount}</h2>
-                            <p>Locations</p>
-                        </article>
-                    </section>
-
                     <section className="admin-listings">
-                        <h2>Your listings</h2>
-
+                        <h1>My Hotel List</h1>
                         {listings.length === 0 && (
                             <p>You have not created any listings yet.</p>
                         )}
@@ -148,11 +96,22 @@ function AdminDashboard() {
                                     className="admin-listing-card"
                                     key={listing._id}
                                 >
-                                    <img
-                                        className="admin-listing-image"
-                                        src={getImageUrl(listing.images[0])}
-                                        alt={listing.title}
-                                    />
+                                    <div className="admin-listing-media">
+                                        <img
+                                            className="admin-listing-image"
+                                            src={getImageUrl(listing.images[0])}
+                                            alt={listing.title}
+                                        />
+
+                                        <div className="listing-actions">
+                                            <Link to={`/admin/update/${listing._id}`}>
+                                                Update
+                                            </Link>
+                                            <button type="button" onClick={() => handleDelete(listing._id)}>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
 
                                     <div className="admin-listing-details">
                                         <p className="admin-listing-type">
@@ -161,14 +120,8 @@ function AdminDashboard() {
 
                                         <h3>{listing.title}</h3>
 
-                                        <p className="admin-listing-location">
-                                            {listing.location}
-                                        </p>
-
                                         <p className="admin-listing-features">
-                                            {listing.guests} guests ·{" "}
-                                            {listing.bedrooms} bedrooms ·{" "}
-                                            {listing.bathrooms} bathrooms
+                                            {listing.guests} guests · Entire Home · {listing.bedrooms} beds · {listing.bathrooms} bath
                                         </p>
 
                                         <p className="admin-listing-amenities">
@@ -194,22 +147,6 @@ function AdminDashboard() {
                                             </p>
                                         </div>
 
-                                        <div className="listing-actions">
-                                            <Link
-                                                to={`/admin/update/${listing._id}`}
-                                            >
-                                                Update
-                                            </Link>
-
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    handleDelete(listing._id)
-                                                }
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
                                     </div>
                                 </article>
                             ))}

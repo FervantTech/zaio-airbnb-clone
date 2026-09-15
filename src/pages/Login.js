@@ -90,18 +90,17 @@ function Login() {
     <main className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="login-form-heading">
-          <h1>Log in to Airbnb Clone</h1>
-          <p>Enter your details to manage your account.</p>
+          <h1>Login</h1>
         </div>
 
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email">Username</label>
         <input
           id="email"
           name="email"
           type="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="name@example.com"
+          placeholder="Enter your email address"
           autoComplete="email"
           aria-invalid={Boolean(errors.email)}
         />
@@ -128,13 +127,13 @@ function Login() {
           </p>
         )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Continue"}
+        <button className="forgot-password-button" type="button">
+          Forgot Password ?
         </button>
 
-        <p className="login-security-message">
-          Your login details are securely checked by the server.
-        </p>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
     </main>
   );

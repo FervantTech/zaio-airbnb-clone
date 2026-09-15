@@ -34,6 +34,14 @@ async function getAccommodations(req, res) {
             filter.location = req.query.location;
         }
 
+        if (req.query.guests) {
+            const guestCount = Number(req.query.guests);
+
+            if (!Number.isNaN(guestCount) && guestCount > 0) {
+                filter.guests = { $gte: guestCount };
+            }
+        }
+
         const accommodations = await Accommodation.find(filter);
 
         res.status(200).json(accommodations);

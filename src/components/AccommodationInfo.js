@@ -1,6 +1,41 @@
 import "../CSS/AccommodationInfo.css";
+import BookingCalendar from "./BookingCalendar";
+import ReviewSection from "./ReviewSection";
+import HostDetails from "./HostDetails";
+import ThingsToKnow from "./ThingsToKnow";
+import getImageUrl from "../utils/imageUrl";
+import {
+    FaBroom,
+    FaDoorOpen,
+    FaFireExtinguisher,
+    FaParking,
+    FaShieldAlt,
+    FaSnowflake,
+    FaSwimmingPool,
+    FaTv,
+    FaUtensils,
+    FaWifi,
+} from "react-icons/fa";
 
-function AccommodationInfo({ accommodation }) {
+const staticAmenities = [
+    [FaWifi, "Wifi"],
+    [FaUtensils, "Kitchen"],
+    [FaParking, "Free parking"],
+    [FaSwimmingPool, "Pool"],
+    [FaTv, "TV"],
+    [FaSnowflake, "Air conditioning"],
+    [FaBroom, "Enhanced cleaning"],
+    [FaDoorOpen, "Self check-in"],
+    [FaShieldAlt, "Security cameras on property"],
+    [FaFireExtinguisher, "Fire extinguisher"],
+];
+
+function AccommodationInfo({
+    accommodation,
+    checkIn,
+    checkOut,
+    onClearDates,
+}) {
     return (
         <div className="accommodation-info">
             <section className="host-summary">
@@ -13,11 +48,6 @@ function AccommodationInfo({ accommodation }) {
             </section>
 
             <section className="information-section">
-                <h2>Hosted by {accommodation.host}</h2>
-                <p>{accommodation.hostDescription}</p>
-            </section>
-
-            <section className="information-section">
                 <h2>About this place</h2>
                 <p>{accommodation.description}</p>
             </section>
@@ -25,6 +55,12 @@ function AccommodationInfo({ accommodation }) {
             <section className="information-section">
                 <h2>Where you’ll sleep</h2>
                 <div className="bedroom-card">
+                    <img
+                        src={getImageUrl(
+                            accommodation.images[1] || accommodation.images[0]
+                        )}
+                        alt={`Bedroom at ${accommodation.title}`}
+                    />
                     <h3>Bedroom</h3>
                     <p>1 queen bed</p>
                 </div>
@@ -34,47 +70,34 @@ function AccommodationInfo({ accommodation }) {
                 <h2>What this place offers</h2>
 
                 <ul className="amenities-list">
-                    {accommodation.amenities.map((amenity) => (
-                        <li key={amenity}>{amenity}</li>
+                    {staticAmenities.map(([Icon, amenity]) => (
+                        <li key={amenity}>
+                            <Icon aria-hidden="true" />
+                            <span>{amenity}</span>
+                        </li>
                     ))}
-
-                    {accommodation.enhancedCleaning && (
-                        <li>Enhanced cleaning</li>
-                    )}
-
-                    {accommodation.selfCheckIn && <li>Self check-in</li>}
                 </ul>
+
+                <button className="show-amenities-button" type="button">
+                    Show all 37 amenities
+                </button>
             </section>
 
-            <section className="information-section">
-                <h2>Reviews</h2>
-                <p>
-                    ★ {accommodation.rating} from {accommodation.reviews} reviews
-                </p>
-            </section>
+            <BookingCalendar
+                location={accommodation.location}
+                checkIn={checkIn}
+                checkOut={checkOut}
+                onClearDates={onClearDates}
+            />
 
-            <section className="information-section">
-                <h2>Things to know</h2>
+            <ReviewSection
+                rating={accommodation.rating}
+                reviewCount={accommodation.reviews}
+            />
 
-                <div className="things-to-know">
-                    <div>
-                        <h3>House rules</h3>
-                        <p>Check-in after 14:00</p>
-                        <p>No smoking</p>
-                    </div>
+            <HostDetails accommodation={accommodation} />
 
-                    <div>
-                        <h3>Health and safety</h3>
-                        <p>Safety equipment is available.</p>
-                        <p>Follow the property’s safety guidelines.</p>
-                    </div>
-
-                    <div>
-                        <h3>Cancellation policy</h3>
-                        <p>Review the cancellation rules before booking.</p>
-                    </div>
-                </div>
-            </section>
+            <ThingsToKnow />
         </div>
     );
 }

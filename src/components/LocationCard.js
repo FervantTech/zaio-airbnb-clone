@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import getImageUrl from "../utils/imageUrl";
 import "../CSS/LocationCard.css";
 
 function LocationCard({ accommodation }) {
+  const location = useLocation();
+  const detailsUrl = `/locations/${accommodation._id}${location.search}`;
+
   return (
-    <Link className="location-card" to={`/locations/${accommodation._id}`}>
+    <Link className="location-card" to={detailsUrl}>
       <img
     src={getImageUrl(accommodation.images[0])}
     alt={accommodation.title}

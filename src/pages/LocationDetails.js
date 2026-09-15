@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import API_URL from "../config/api";
 import getImageUrl from "../utils/imageUrl";
 import AccommodationInfo from "../components/AccommodationInfo";
@@ -8,10 +8,24 @@ import "../CSS/LocationDetails.css";
 
 function LocationDetails() {
     const { id } = useParams();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
 
     const [accommodation, setAccommodation] = useState(null);
+    const [checkIn, setCheckIn] = useState(
+        searchParams.get("checkIn") || ""
+    );
+    const [checkOut, setCheckOut] = useState(
+        searchParams.get("checkOut") || ""
+    );
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        const updatedSearchParams = new URLSearchParams(location.search);
+        setCheckIn(updatedSearchParams.get("checkIn") || "");
+        setCheckOut(updatedSearchParams.get("checkOut") || "");
+    }, [location.search]);
 
     useEffect(() => {
         async function loadAccommodation() {
@@ -87,8 +101,22 @@ function LocationDetails() {
             </section>
 
             <section className="details-layout">
-                <AccommodationInfo accommodation={accommodation} />
-                <CostCalculator accommodation={accommodation} />
+                <AccommodationInfo
+                    accommodation={accommodation}
+                    checkIn={checkIn}
+                    checkOut={checkOut}
+                    onClearDates={() => {
+                        setCheckIn("");
+                        setCheckOut("");
+                    }}
+                />
+                <CostCalculator
+                    accommodation={accommodation}
+                    checkIn={checkIn}
+                    checkOut={checkOut}
+                    setCheckIn={setCheckIn}
+                    setCheckOut={setCheckOut}
+                />
             </section>
         </main>
     );

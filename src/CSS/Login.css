@@ -2,52 +2,49 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    min-height: 650px;
+    min-height: 620px;
     padding: 70px 20px;
-    background-color: #f7f7f7;
+    background-color: white;
 }
 
 .login-form {
     box-sizing: border-box;
     width: 100%;
-    max-width: 480px;
+    max-width: 420px;
     height: fit-content;
-    padding: 38px;
-    border: 1px solid #dddddd;
-    border-radius: 16px;
+    padding: 20px 0;
+    border: none;
+    border-radius: 0;
     background-color: white;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 
 .login-form-heading {
-    margin-bottom: 28px;
+    margin-bottom: 55px;
     text-align: center;
 }
 
 .login-form-heading h1 {
     margin: 5px 0 10px;
-    font-size: 30px;
-}
-
-.login-form-heading > p {
-    margin: 0;
-    color: #717171;
+    font-size: 24px;
 }
 
 .login-form label {
     display: block;
-    margin: 18px 0 8px;
-    font-weight: bold;
+    margin: 22px 0 8px;
+    color: #405cf5;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .login-form input {
     box-sizing: border-box;
     width: 100%;
-    padding: 15px;
-    border: 1px solid #b0b0b0;
-    border-radius: 8px;
+    padding: 11px;
+    border: 1px solid #222222;
+    border-radius: 4px;
     font: inherit;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .login-form input:focus {
@@ -73,22 +70,23 @@
 }
 
 .login-form button {
-    width: 100%;
-    margin-top: 25px;
-    padding: 15px;
+    display: block;
+    width: 210px;
+    margin: 38px auto 0;
+    padding: 12px;
     border: none;
-    border-radius: 8px;
-    background-color: #ff385c;
+    border-radius: 4px;
+    background-color: #4054f5;
     color: white;
     font: inherit;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .login-form button:hover:not(:disabled) {
-    background-color: #e31c5f;
+    background-color: #3044dc;
 }
 
 .login-form button:disabled {
@@ -96,11 +94,19 @@
     opacity: 0.65;
 }
 
-.login-security-message {
-    margin: 18px 0 0;
-    color: #717171;
-    font-size: 13px;
-    text-align: center;
+.login-form .forgot-password-button {
+    width: auto;
+    margin: 22px auto 0;
+    padding: 0;
+    background: none;
+    color: #405cf5;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.login-form .forgot-password-button:hover {
+    background: none;
+    color: #3044dc;
 }
 
 @media (max-width: 550px) {

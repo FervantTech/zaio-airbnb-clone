@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import API_URL from "../config/api";
 import "../CSS/CostCalculator.css";
 
-function CostCalculator({ accommodation }) {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+function CostCalculator({
+  accommodation,
+  checkIn,
+  checkOut,
+  setCheckIn,
+  setCheckOut,
+}) {
   const [guestCount, setGuestCount] = useState(1);
 
   const [error, setError] = useState("");
@@ -108,7 +112,14 @@ function CostCalculator({ accommodation }) {
           <input
             type="date"
             value={checkIn}
-            onChange={(event) => setCheckIn(event.target.value)}
+            onChange={(event) => {
+              const nextCheckIn = event.target.value;
+              setCheckIn(nextCheckIn);
+
+              if (checkOut && checkOut <= nextCheckIn) {
+                setCheckOut("");
+              }
+            }}
           />
         </label>
 

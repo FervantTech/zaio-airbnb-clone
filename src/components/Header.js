@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Link,
     useLocation,
@@ -12,10 +12,13 @@ function Header() {
     const [user, setUser] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
-    const [destination, setDestination] = useState("Cape Town");
+    const [destination, setDestination] = useState("");
     const [checkIn, setCheckIn] = useState("");
     const [checkOut, setCheckOut] = useState("");
-    const [guests, setGuests] = useState(1);
+    const [adults, setAdults] = useState(1);
+    const [children, setChildren] = useState(0);
+    const [guestMenuOpen, setGuestMenuOpen] = useState(false);
+    const guestPickerRef = useRef(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -28,39 +31,54 @@ function Header() {
         setMenuOpen(false);
         setSearchOpen(false);
 
-        setDestination(searchParams.get("city") || "Cape Town");
+        setDestination(searchParams.get("city") || "");
         setCheckIn(searchParams.get("checkIn") || "");
         setCheckOut(searchParams.get("checkOut") || "");
-        setGuests(Number(searchParams.get("guests")) || 1);
+        const savedAdults = searchParams.get("adults");
+        const savedChildren = searchParams.get("children");
+        const savedGuests = Number(searchParams.get("guests"));
+
+        setAdults(
+            savedAdults !== null
+                ? Number(savedAdults)
+                : savedGuests || 1
+        );
+        setChildren(
+            savedChildren !== null ? Number(savedChildren) : 0
+        );
+        setGuestMenuOpen(false);
     }, [location.pathname, location.search]);
+
+    useEffect(() => {
+        function closeGuestMenu(event) {
+            if (
+                guestPickerRef.current &&
+                !guestPickerRef.current.contains(event.target)
+            ) {
+                setGuestMenuOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", closeGuestMenu);
+        return () => document.removeEventListener("mousedown", closeGuestMenu);
+    }, []);
 
     const showSearch =
         !location.pathname.startsWith("/admin") &&
         !["/login", "/reservations"].includes(location.pathname);
-    const showSearchSummary = location.pathname.startsWith("/locations");
+    const isLoginPage = location.pathname === "/login";
+    const guests = adults + children;
 
-    function formatSearchDates() {
-        if (!checkIn || !checkOut) {
-            return "Add dates";
-        }
-
-        const dateFormatter = new Intl.DateTimeFormat("en", {
-            month: "short",
-            day: "numeric",
-        });
-
-        return `${dateFormatter.format(
-            new Date(`${checkIn}T00:00:00`)
-        )} – ${dateFormatter.format(new Date(`${checkOut}T00:00:00`))}`;
-    }
-
-    function handleSearch(event) {
-        event.preventDefault();
-
+    function navigateToSearch(selectedDestination = destination) {
         const searchParams = new URLSearchParams({
-            city: destination,
             guests: String(guests),
+            adults: String(adults),
+            children: String(children),
         });
+
+        if (selectedDestination) {
+            searchParams.set("city", selectedDestination);
+        }
 
         if (checkIn) {
             searchParams.set("checkIn", checkIn);
@@ -71,7 +89,19 @@ function Header() {
         }
 
         setSearchOpen(false);
+        setGuestMenuOpen(false);
         navigate(`/locations?${searchParams.toString()}`);
+    }
+
+    function handleSearch(event) {
+        event.preventDefault();
+        navigateToSearch();
+    }
+
+    function handleDestinationChange(event) {
+        const selectedDestination = event.target.value;
+        setDestination(selectedDestination);
+        navigateToSearch(selectedDestination);
     }
 
     function handleLogout() {
@@ -89,31 +119,12 @@ function Header() {
                 <img src={airbnbLogo} alt="Airbnb logo" />
             </Link>
 
-            <nav
-                className={`header-navigation ${
-                    showSearchSummary ? "header-navigation-hidden" : ""
-                }`}
-            >
-                <Link to="/locations">Places to stay</Link>
-                <Link to="/">Experiences</Link>
-                <Link to="/">Online Experiences</Link>
-            </nav>
-
-            {showSearchSummary && !searchOpen && (
-                <button
-                    className="header-search-summary"
-                    type="button"
-                    onClick={() => setSearchOpen(!searchOpen)}
-                >
-                    <span>{destination}</span>
-                    <span>{formatSearchDates()}</span>
-                    <span>
-                        {guests} {guests === 1 ? "guest" : "guests"}
-                    </span>
-                    <span className="header-search-summary-icon">
-                        <FaSearch />
-                    </span>
-                </button>
+            {!isLoginPage && (
+                <nav className="header-navigation">
+                    <Link to="/locations">Places to stay</Link>
+                    <Link to="/">Experiences</Link>
+                    <Link to="/">Online Experiences</Link>
+                </nav>
             )}
 
             {showSearch && (
@@ -127,7 +138,7 @@ function Header() {
                 </button>
             )}
 
-            <div className="header-profile">
+            {!isLoginPage && <div className="header-profile">
                 {!user && <Link to="/admin">Become a host</Link>}
 
                 {user ? (
@@ -167,16 +178,10 @@ function Header() {
                         Login
                     </Link>
                 )}
-            </div>
+            </div>}
 
             {showSearch && (
-                <div
-                    className={`header-search-row ${
-                        showSearchSummary && !searchOpen
-                            ? "header-search-row-collapsed"
-                            : ""
-                    }`}
-                >
+                <div className="header-search-row">
                     <form
                         className={`header-search ${
                             searchOpen ? "header-search-open" : ""
@@ -187,10 +192,9 @@ function Header() {
                         Location
                         <select
                             value={destination}
-                            onChange={(event) =>
-                                setDestination(event.target.value)
-                            }
+                            onChange={handleDestinationChange}
                         >
+                            <option value="">All Locations</option>
                             <option value="Cape Town">Cape Town</option>
                             <option value="Johannesburg">Johannesburg</option>
                             <option value="Durban">Durban</option>
@@ -221,21 +225,67 @@ function Header() {
                         />
                     </label>
 
-                    <label>
-                        Guests
-                        <select
-                            value={guests}
-                            onChange={(event) =>
-                                setGuests(Number(event.target.value))
-                            }
+                    <div className="guest-picker" ref={guestPickerRef}>
+                        <button
+                            className="guest-picker-toggle"
+                            type="button"
+                            onClick={() => setGuestMenuOpen(!guestMenuOpen)}
+                            aria-expanded={guestMenuOpen}
                         >
-                            {[1, 2, 3, 4, 5, 6].map((guest) => (
-                                <option value={guest} key={guest}>
-                                    {guest}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                            <strong>Guests</strong>
+                            <span>
+                                {guests} {guests === 1 ? "guest" : "guests"}
+                            </span>
+                        </button>
+
+                        {guestMenuOpen && (
+                            <div className="guest-picker-menu">
+                                <div className="guest-counter-row">
+                                    <span>Adults</span>
+                                    <div className="guest-counter-controls">
+                                        <button
+                                            type="button"
+                                            onClick={() => setAdults(Math.max(0, adults - 1))}
+                                            disabled={adults === 0}
+                                            aria-label="Remove an adult"
+                                        >
+                                            −
+                                        </button>
+                                        <span>{adults}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setAdults(adults + 1)}
+                                            aria-label="Add an adult"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="guest-counter-row">
+                                    <span>Children</span>
+                                    <div className="guest-counter-controls">
+                                        <button
+                                            type="button"
+                                            onClick={() => setChildren(Math.max(0, children - 1))}
+                                            disabled={children === 0}
+                                            aria-label="Remove a child"
+                                        >
+                                            −
+                                        </button>
+                                        <span>{children}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setChildren(children + 1)}
+                                            aria-label="Add a child"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                         <button
                             className="header-search-button"

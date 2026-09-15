@@ -136,6 +136,7 @@ function UpdateListing() {
                     saving ? "Saving changes..." : "Save changes"
                 }
                 onSubmit={handleUpdate}
+                onCancel={() => navigate("/admin")}
             />
             </main>
         </>

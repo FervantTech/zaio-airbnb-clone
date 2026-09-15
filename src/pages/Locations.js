@@ -5,7 +5,8 @@ import LocationCard from "../components/LocationCard";
 
 function Locations() {
     const [searchParams] = useSearchParams();
-    const selectedCity = searchParams.get("city") || "Cape Town";
+    const selectedCity = searchParams.get("city") || "";
+    const selectedGuests = Number(searchParams.get("guests")) || 1;
 
     const [accommodations, setAccommodations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,11 +18,17 @@ function Locations() {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch(
-                    `${API_URL}/accommodations?location=${encodeURIComponent(
-                        selectedCity
-                    )}`
-                );
+                const requestParams = new URLSearchParams({
+                    guests: String(selectedGuests),
+                });
+
+                if (selectedCity) {
+                    requestParams.set("location", selectedCity);
+                }
+
+                const endpoint = `${API_URL}/accommodations?${requestParams.toString()}`;
+
+                const response = await fetch(endpoint);
 
                 const data = await response.json();
 
@@ -40,7 +47,7 @@ function Locations() {
         }
 
         loadAccommodations();
-    }, [selectedCity]);
+    }, [selectedCity, selectedGuests]);
 
     return (
         <main>
@@ -51,13 +58,20 @@ function Locations() {
 
                 {!loading && !error && (
                     <>
-                        <p>{accommodations.length} accommodations</p>
-                        <h1>Stays in {selectedCity}</h1>
+                        <p>
+                            {accommodations.length}{" "}
+                            {accommodations.length === 1
+                                ? "accommodation"
+                                : "accommodations"}
+                        </p>
+                        <h1>
+                            Stays in {selectedCity || "all locations"}
+                        </h1>
 
                         {accommodations.length === 0 ? (
                             <p>
                                 No accommodations are currently available in{" "}
-                                {selectedCity}.
+                                {selectedCity || "all locations"}.
                             </p>
                         ) : (
                             accommodations.map((accommodation) => (

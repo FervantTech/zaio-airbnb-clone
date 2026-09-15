@@ -21,6 +21,7 @@ function ListingForm({
     initialListing = emptyListing,
     buttonText,
     onSubmit,
+    onCancel,
     requireImages = false,
 }) {
     const [formData, setFormData] = useState(initialListing);
@@ -124,162 +125,78 @@ function ListingForm({
 
     return (
         <form className="listing-form" onSubmit={handleSubmit}>
-            <div className="listing-form-section-heading">
-                <h2>Property details</h2>
-                <p>Tell guests what makes this accommodation special.</p>
-            </div>
-
-            <div className="form-group full-width">
-                <label htmlFor="title">Listing title</label>
-                <input
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder="Luxury apartment with city views"
-                />
-                {showError("title")}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="location">Location</label>
-                <select
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                >
-                    <option value="">Select a location</option>
-                    <option value="Cape Town">Cape Town</option>
-                    <option value="Johannesburg">Johannesburg</option>
-                    <option value="Durban">Durban</option>
-                    <option value="Pretoria">Pretoria</option>
-                </select>
-                {showError("location")}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="type">Accommodation type</label>
-                <input
-                    id="type"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    placeholder="Entire apartment"
-                />
-                {showError("type")}
-            </div>
-
-            <div className="form-group full-width">
-                <label htmlFor="description">Description</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    rows="5"
-                    value={formData.description}
-                    onChange={handleChange}
-                />
-                {showError("description")}
-            </div>
-
-            <div className="listing-form-section-heading">
-                <h2>Rooms and pricing</h2>
-                <p>Set the capacity and nightly price for this listing.</p>
-            </div>
-
-            {["guests", "bedrooms", "bathrooms", "price"].map((field) => (
-                <div className="form-group" key={field}>
-                    <label htmlFor={field}>
-                        {field === "price"
-                            ? "Price per night (R)"
-                            : field.charAt(0).toUpperCase() +
-                              field.slice(1)}
-                    </label>
-                    <input
-                        id={field}
-                        name={field}
-                        type="number"
-                        min="1"
-                        value={formData[field]}
-                        onChange={handleChange}
-                    />
-                    {showError(field)}
+            <div className="listing-form-column">
+                <div className="form-group">
+                    <label htmlFor="title">Listing Name</label>
+                    <input id="title" name="title" value={formData.title} onChange={handleChange} />
+                    {showError("title")}
                 </div>
-            ))}
 
-            <div className="form-group full-width">
-                <label htmlFor="amenities">Amenities</label>
-                <input
-                    id="amenities"
-                    name="amenities"
-                    value={formData.amenities}
-                    onChange={handleChange}
-                    placeholder="Wifi, Kitchen, Free parking"
-                />
-                <p className="form-help-text">
-                    Separate each amenity with a comma.
-                </p>
-            </div>
-
-            <div className="listing-form-section-heading">
-                <h2>Fees and discount</h2>
-                <p>Add any extra charges and the weekly discount.</p>
-            </div>
-
-            {[
-                "weeklyDiscount",
-                "cleaningFee",
-                "serviceFee",
-                "occupancyTaxes",
-            ].map((field) => (
-                <div className="form-group" key={field}>
-                    <label htmlFor={field}>
-                        {field.replace(/([A-Z])/g, " $1")}
-                    </label>
-                    <input
-                        id={field}
-                        name={field}
-                        type="number"
-                        min="0"
-                        value={formData[field]}
-                        onChange={handleChange}
-                    />
+                <div className="form-group">
+                    <label htmlFor="location">Location</label>
+                    <select id="location" name="location" value={formData.location} onChange={handleChange}>
+                        <option value="">Select a location</option>
+                        <option value="Cape Town">Cape Town</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Pretoria">Pretoria</option>
+                    </select>
+                    {showError("location")}
                 </div>
-            ))}
 
-            <div className="listing-form-section-heading">
-                <h2>Property images</h2>
-                <p>Select clear photos that show the accommodation.</p>
+                <div className="form-group">
+                    <label htmlFor="description">Description</label>
+                    <textarea id="description" name="description" rows="6" value={formData.description} onChange={handleChange} />
+                    {showError("description")}
+                </div>
+
+                <div className="form-group image-upload-group">
+                    <label htmlFor="images">Images</label>
+                    <input id="images" type="file" accept="image/*" multiple onChange={handleImages} />
+                    {images.length > 0 && <p className="selected-images-message">{images.length} images selected</p>}
+                    {!requireImages && images.length === 0 && <p className="form-help-text">Leave empty to keep current images.</p>}
+                    {showError("images")}
+                </div>
             </div>
 
-            <div className="form-group full-width image-upload-group">
-                <label htmlFor="images">Property images</label>
-                <input
-                    id="images"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImages}
-                />
+            <div className="listing-form-column">
+                <div className="listing-number-row">
+                    {["bedrooms", "bathrooms", "guests"].map((field) => (
+                        <div className="form-group" key={field}>
+                            <label htmlFor={field}>{field === "bedrooms" ? "Rooms" : field === "bathrooms" ? "Baths" : "Guests"}</label>
+                            <input id={field} name={field} type="number" min="1" value={formData[field]} onChange={handleChange} />
+                            {showError(field)}
+                        </div>
+                    ))}
+                </div>
 
-                {images.length > 0 && (
-                    <p className="selected-images-message">
-                        {images.length} images selected
-                    </p>
-                )}
+                <div className="form-group">
+                    <label htmlFor="type">Type</label>
+                    <input id="type" name="type" value={formData.type} onChange={handleChange} placeholder="Entire apartment" />
+                    {showError("type")}
+                </div>
 
-                {!requireImages && images.length === 0 && (
-                    <p className="form-help-text">
-                        Leave this empty to keep the current images.
-                    </p>
-                )}
+                <div className="form-group">
+                    <label htmlFor="amenities">Amenities</label>
+                    <input id="amenities" name="amenities" value={formData.amenities} onChange={handleChange} placeholder="Wifi, Kitchen, Free parking" />
+                    <p className="form-help-text">Separate amenities with commas.</p>
+                </div>
 
-                {showError("images")}
+                <div className="listing-number-row listing-price-row">
+                    {["price", "weeklyDiscount", "cleaningFee", "serviceFee", "occupancyTaxes"].map((field) => (
+                        <div className="form-group" key={field}>
+                            <label htmlFor={field}>{field === "price" ? "Price (R)" : field.replace(/([A-Z])/g, " $1")}</label>
+                            <input id={field} name={field} type="number" min={field === "price" ? "1" : "0"} value={formData[field]} onChange={handleChange} />
+                            {showError(field)}
+                        </div>
+                    ))}
+                </div>
             </div>
 
-            <button className="listing-submit-button" type="submit">
-                {buttonText}
-            </button>
+            <div className="listing-form-actions">
+                <button className="listing-submit-button" type="submit">{buttonText}</button>
+                <button className="listing-cancel-button" type="button" onClick={onCancel}>Cancel</button>
+            </div>
         </form>
     );
 }

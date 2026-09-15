@@ -54,7 +54,7 @@ function CreateListing() {
 
             <main className="listing-page">
             <div className="listing-page-heading">
-                <h1>Create a new listing</h1>
+                <h1>Create Listing</h1>
                 <p>Enter the property’s information below.</p>
             </div>
 
@@ -66,6 +66,7 @@ function CreateListing() {
                     loading ? "Creating listing..." : "Create listing"
                 }
                 onSubmit={handleCreate}
+                onCancel={() => navigate("/admin")}
             />
             </main>
         </>
